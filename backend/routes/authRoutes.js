@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
 const router = express.Router();
-
+ 
 
 // REGISTER
 
@@ -36,15 +36,10 @@ router.post("/register", async (req, res) => {
 
     res.status(201).json({
       message: "User registered successfully",
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-      },
     });
   } catch (error) {
     res.status(500).json({
-      message: error.message,
+      message: "Server Error",
     });
   }
 });
@@ -96,9 +91,10 @@ router.post("/login", async (req, res) => {
         email: user.email,
       },
     });
+    
   } catch (error) {
     res.status(500).json({
-      message: error.message,
+      message: "Server Error",
     });
   }
 });

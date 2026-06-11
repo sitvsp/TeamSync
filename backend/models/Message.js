@@ -7,9 +7,30 @@ const messageSchema = new mongoose.Schema(
       required: true,
     },
 
+    receiver: {
+      type: String,
+      default: null,
+    },
+
     text: {
       type: String,
-      required: true,
+      default: "",
+    },
+
+    fileUrl: {
+      type: String,
+      default: "",
+    },
+
+    fileName: {
+      type: String,
+      default: "",
+    },
+
+    chatType: {
+      type: String,
+      enum: ["group", "private"],
+      default: "group",
     },
   },
   {

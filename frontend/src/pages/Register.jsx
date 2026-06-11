@@ -6,6 +6,8 @@ import API from "../services/api";
 function Register() {
   const navigate = useNavigate();
 
+  const token = localStorage.getItem("token");
+
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -13,12 +15,10 @@ function Register() {
   });
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-
     if (token) {
       navigate("/dashboard");
     }
-  }, [navigate]);
+  }, [token, navigate]);
 
   const handleChange = (e) => {
     setForm({
@@ -31,19 +31,13 @@ function Register() {
     e.preventDefault();
 
     try {
-      await API.post(
-        "/auth/register",
-        form
-      );
+      await API.post("/auth/register", form);
 
       alert("Registration Successful");
 
       navigate("/");
     } catch (error) {
-      alert(
-        error.response?.data?.message ||
-          "Registration Failed"
-      );
+      alert("Registration Failed");
     }
   };
 
@@ -86,7 +80,7 @@ function Register() {
 
         <button
           type="submit"
-          className="w-full bg-green-500 p-3 rounded hover:bg-green-600"
+          className="w-full bg-green-500 p-3 rounded-lg hover:bg-green-600"
         >
           Register
         </button>

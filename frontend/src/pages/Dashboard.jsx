@@ -1,117 +1,57 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import API from "../services/api.js";
-
 import Navbar from "../components/Navbar";
-import TaskList from "../components/TaskList";
 import ChatBox from "../components/ChatBox";
 import FileUpload from "../components/FileUpload";
+import UserSidebar from "../components/UserSidebar";
 
 function Dashboard() {
   const navigate = useNavigate();
 
-  const token =
-    localStorage.getItem("token");
+  const token = localStorage.getItem("token");
 
-  const [title, setTitle] =
-    useState("");
+  const name = localStorage.getItem("name");
 
-  const [tasks, setTasks] =
-    useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   useEffect(() => {
     if (!token) {
       navigate("/");
-      return;
     }
-
-    getTasks();
-  }, []);
-
-  const getTasks = async () => {
-    try {
-      const res = await API.get(
-        "/tasks",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      setTasks(res.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const createTask = async (e) => {
-    e.preventDefault();
-
-    if (!title.trim()) return;
-
-    try {
-      await API.post(
-        "/tasks",
-        { title },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      setTitle("");
-
-      getTasks();
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  }, [token, navigate]);
 
   return (
     <>
       <Navbar />
 
-      <div className="min-h-screen bg-gray-900 text-white p-8">
+      <div className="min-h-screen bg-gray-900 text-white px-6 pb-6">
 
-        <div className="bg-gray-800 p-6 rounded-lg">
+        <h1 className="text-xl mb-6">
+          Hello {name}
+        </h1>
 
-          <h2 className="text-2xl font-bold mb-4">
-            Task Manager
-          </h2>
 
-          <form
-            onSubmit={createTask}
-            className="flex gap-2"
-          >
-            <input
-              type="text"
-              placeholder="Enter Task..."
-              value={title}
-              onChange={(e) =>
-                setTitle(e.target.value)
-              }
-              className="flex-1 p-3 rounded text-black"
+        <div className="flex gap-6">
+
+          <UserSidebar
+            selectedUser={selectedUser}
+            setSelectedUser={setSelectedUser}
+          />
+
+          <div className="flex-1">
+
+            <ChatBox
+              selectedUser={selectedUser}
             />
 
-            <button
-              className="bg-green-500 px-5 rounded"
-            >
-              Add Task
-            </button>
-          </form>
+            <FileUpload
+              selectedUser={selectedUser}
+            />
 
-          <TaskList
-            tasks={tasks}
-            getTasks={getTasks}
-          />
+          </div>
+
         </div>
-
-        <ChatBox />
-
-        <FileUpload />
 
       </div>
     </>
