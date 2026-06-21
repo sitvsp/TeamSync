@@ -171,7 +171,7 @@ TeamSync
 ### Clone Repository
 
 ```bash
-git clone https://github.com/priya190505/TeamSync.git
+git clone https://github.com/sitvsp/TeamSync.git
 ```
 
 ### Backend Setup
